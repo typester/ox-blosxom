@@ -76,4 +76,3 @@ meta-creation_date: 2013-06-10T13:47:00+0900\n\n"
 " 'blosxom))))
 
 (ert-run-tests-batch-and-exit)
-
