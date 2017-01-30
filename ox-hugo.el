@@ -44,4 +44,26 @@
      "+++\n"
      contents)))
 
+;; End-user functions
+(defun org-hugo-export-to-html
+  (&optional async subtreep visible-only body-only ext-plist)
+  (interactive)
+  (let* ((extension ".html")        ; TODO: make customize variable
+         (file (org-export-output-file-name extension subtreep)))
+    (if async
+        (org-export-async-start
+         (lambda (f) (org-export-add-to-stack f 'hugo))
+         (let ((org-export-coding-system 'utf-8))
+           `(expand-file-name
+             (org-export-to-file
+              'hugo ,file ,subtreep ,visible-only ,body-only ',ext-plist))))
+      (let ((org-export-coding-system 'utf-8))
+        (org-export-to-file
+         'hugo file subtreep visible-only body-only ext-plist)))))
+
+(defun org-hugo-publish-to-html (plist filename pub-dir)
+  (org-publish-org-to 'hugo filename
+                      ".html"
+                      plist pub-dir))
+
 (provide 'ox-hugo)
