@@ -26,12 +26,15 @@
       (org-hugo-puts-header name val)
     ""))
 
+(defun org-hugo-reformat-tz (datetime)
+  (replace-regexp-in-string "\\(\\+[0-9][0-9]\\)\\([0-9][0-9]\\)$" "\\1:\\2" datetime))
+
 (defun org-hugo-template (contents info)
   (let* ((title (org-export-data
                  (or (plist-get info :title) "") info))
          (timestamp (plist-get info :date))
          (datetime (if timestamp
-                       (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z")
+                       (org-hugo-reformat-tz (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z"))
                      nil))
          (slug (plist-get info :slug))
          (tags (plist-get info :tags)))

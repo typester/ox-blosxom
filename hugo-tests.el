@@ -6,7 +6,7 @@
                  (org-export-string-as "#+TITLE: hoge" 'hugo))))
 
 (ert-deftest date ()
-  (should (equal "+++\ntitle = \"hoge\"\ndate = \"2016-12-14T23:34:00+0900\"\n+++\n"
+  (should (equal "+++\ntitle = \"hoge\"\ndate = \"2016-12-14T23:34:00+09:00\"\n+++\n"
                  (org-export-string-as "#+TITLE: hoge\n#+DATE: <2016-12-14 Wed 23:34>" 'hugo))))
 
 (ert-deftest slug ()
