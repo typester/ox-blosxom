@@ -1,3 +1,6 @@
 [submodule "org-mode"]
 	path = org-mode
-	url = git://orgmode.org/org-mode.git
+	url = https://code.orgmode.org/bzg/org-mode.git
+[submodule "htmlize"]
+	path = htmlize
+	url = git@github.com:hniksic/emacs-htmlize.git

@@ -47,9 +47,10 @@
       (concat (format "<h%d>%s</h%d>" level title level) "\n" contents))))
 
 (defun org-simple-html-inner-template (contents info)
-  (concat
-   contents
-   (org-simple-html-footnote-section info)))
+  (let ((org-html-footnotes-section "SE!!!!!!!!!!!!! %s"))
+    (concat
+     contents
+     (org-simple-html-footnote-section info))))
 
 (defun org-simple-html-template (contents info)
   contents)
@@ -117,22 +118,53 @@
     (format "<a class=\"footref\" href=\"#fn%d\" id=\"r%d\">[%d]</a>" number number number)))
 
 (defun org-simple-html-footnote-section (info)
-  (let* ((fn-alist (org-export-collect-footnote-definitions
-                    (plist-get info :parse-tree) info))
-         (fn-alist
-          (loop for (n typep raw) in fn-alist collect
-                (cons n (replace-regexp-in-string "<p>\\(.*\\)</p>" "\\1"
-                                                  (if (eq (org-element-type raw) 'org-data)
-                                                      (org-trim (org-export-data raw info))
-                                                    (format "<p>%s</p>"
-                                                            (org-trim (org-export-data raw info)))))))))
-    (if fn-alist
-        (concat "<aside class=\"footdef\">\n"
-                (mapconcat (lambda (x)
-                              (format "<p id=\"fn%d\"><a href=\"#r%d\">[%d]</a> %s</p>"
-                                      (car x) (car x) (car x) (cdr x)))
-                           fn-alist "\n")
-                "\n</aside>\n"))))
+  "Format the footnote section.
+INFO is a plist used as a communication channel."
+  (let ((org-html-footnotes-section "%s"))
+    (pcase (org-export-collect-footnote-definitions info)
+      (`nil nil)
+      (definitions
+        (format "<aside class=\"footdef\">%s</aside>\n"
+         (format
+	      "\n%s\n"
+	      (mapconcat
+	       (lambda (definition)
+	         (pcase definition
+	           (`(,n ,_ ,def)
+	            ;; `org-export-collect-footnote-definitions' can return
+	            ;; two kinds of footnote definitions: inline and blocks.
+	            ;; Since this should not make any difference in the HTML
+	            ;; output, we wrap the inline definitions within
+	            ;; a "footpara" class paragraph.
+	            (let ((inline? (not (org-element-map def org-element-all-elements
+				                      #'identity nil t)))
+		              (anchor (format "<a href=\"#r%d\">[%d]</a>" n n))
+		              (contents (replace-regexp-in-string
+                                 "<p>\\(.*\\)</p>" "\\1" (org-trim (org-export-data def info)))))
+                  (format "<p id=\"fn%d\">%s %s</p>"
+                          n
+			              anchor
+                          contents)))))
+	       definitions
+	       "\n")))))))
+
+;;(defun org-simple-html-footnote-section (info)
+;;  (let* ((fn-alist (org-export-collect-footnote-definitions
+;;                    (plist-get info :parse-tree) info))
+;;         (fn-alist
+;;          (loop for (n typep raw) in fn-alist collect
+;;                (cons n (replace-regexp-in-string "<p>\\(.*\\)</p>" "\\1"
+;;                                                  (if (eq (org-element-type raw) 'org-data)
+;;                                                      (org-trim (org-export-data raw info))
+;;                                                    (format "<p>%s</p>"
+;;                                                            (org-trim (org-export-data raw info)))))))))
+;;    (if fn-alist
+;;        (concat "<aside class=\"footdef\">\n"
+;;                (mapconcat (lambda (x)
+;;                              (format "<p id=\"fn%d\"><a href=\"#r%d\">[%d]</a> %s</p>"
+;;                                      (car x) (car x) (car x) (cdr x)))
+;;                           fn-alist "\n")
+;;                "\n</aside>\n"))))
 
 ;; End-user functions
 (defun org-simple-html-export-to-txt

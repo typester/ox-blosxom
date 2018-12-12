@@ -1,7 +1,7 @@
 (require 'ert)
 (require 'ox-blosxom)
 
-(setq org-export-async-debug t))
+(setq org-export-async-debug t)
 
 (ert-deftest paragraph ()
   (should (equal "<p>foo\nbar</p>\n<p>buzz</p>\n"
