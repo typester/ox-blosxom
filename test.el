@@ -35,19 +35,19 @@ buzz" 'blosxom t))))
                  (org-export-string-as "#+TITLE: hoge\n\nfuga" 'blosxom))))
 
 (ert-deftest code ()
-  (should (equal "<pre><code class=\"perl\">hoge\n</code></pre>\n"
+  (should (equal "<pre><code class=\"perl\">hoge</code></pre>\n"
                 (org-export-string-as "#+BEGIN_SRC perl
   hoge
 #+END_SRC" 'blosxom t))))
 
 (ert-deftest code-keyword ()
-  (should (equal "<pre><code class=\"perl\"><span class=\"keyword\">use</span> <span class=\"constant\">strict</span>;\n</code></pre>\n"
+  (should (equal "<pre><code class=\"perl\"><span class=\"keyword\">use</span> <span class=\"constant\">strict</span>;</code></pre>\n"
                 (org-export-string-as "#+BEGIN_SRC perl
   use strict;
 #+END_SRC" 'blosxom t))))
 
 (ert-deftest code-with-indent ()
-  (should (equal "<pre><code class=\"emacs-lisp\">(add-hook 'before-save-hook 'gofmt-before-save)\n</code></pre>\n"
+  (should (equal "<pre><code class=\"emacs-lisp\">(add-hook 'before-save-hook 'gofmt-before-save)</code></pre>\n"
                  (org-export-string-as "   #+BEGIN_SRC emacs-lisp
      (add-hook 'before-save-hook 'gofmt-before-save)
    #+END_SRC
