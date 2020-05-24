@@ -3,14 +3,18 @@
 
 (org-export-define-derived-backend
  'blosxom 'simple-html
- :translate-alist '((template . org-blosxom-template)))
+ :translate-alist '((template . org-blosxom-template))
+ :options-alist '((:tz "TZ" nil nil t)))
 
 (defun org-blosxom-template (contents info)
   (let* ((title (org-export-data
                  (or (plist-get info :title) "") info))
          (timestamp (plist-get info :date))
+         (tz (plist-get info :tz))
          (datetime (if timestamp
-                       (org-timestamp-format (car timestamp) "meta-creation_date: %Y-%m-%dT%T%z\n")
+                       (if tz
+                           (concat (org-timestamp-format (car timestamp) "meta-creation_date: %Y-%m-%dT%T") (or (car (split-string tz)) tz) "\n")
+                         (org-timestamp-format (car timestamp) "meta-creation_date: %Y-%m-%dT%T%z\n"))
                      "")))
     (concat title "\n" datetime "\n" contents)))
 

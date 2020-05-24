@@ -4,14 +4,18 @@
 (org-export-define-derived-backend 'html-json 'simple-html
   :translate-alist '((template . org-html-json-template))
   :options-alist '((:tags "TAGS" nil nil split)
-                   (:eid "EID" nil nil t)))
+                   (:eid "EID" nil nil t)
+                   (:tz "TZ" nil nil t)))
 
 (defun org-html-json-template (contents info)
   (let* ((title (org-export-data
                  (or (plist-get info :title) "") info))
          (timestamp (plist-get info :date))
+         (tz (plist-get info :tz))
          (datetime (if timestamp
-                       (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z")
+                       (if tz
+                           (concat (org-timestamp-format (car timestamp) "%Y-%m-%dT%T") (or (car (split-string tz)) tz))
+                         (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z"))
                      ""))
          (tags (plist-get info :tags))
          (eid (plist-get info :eid))

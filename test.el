@@ -73,6 +73,7 @@ buzz" 'blosxom t))))
 meta-creation_date: 2013-06-10T13:47:00+0900\n\n"
                  (org-export-string-as "#+TITLE: hoge
 #+DATE: <2013-06-10 Mon 13:47>
+#+TZ: +0900 (JST)
 " 'blosxom))))
 
 (ert-run-tests-batch-and-exit)
