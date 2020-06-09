@@ -26,4 +26,9 @@
          (tags (plist-get json :tags)))
     (should (equal tags ["foo" "bar"]))))
 
+(ert-deftest image ()
+  (let* ((json (render-json-to-string (org-export-string-as "#+IMAGE: https://example.com/thumbnail.jpg" 'html-json)))
+         (image (plist-get json :image)))
+    (should (equal image "https://example.com/thumbnail.jpg"))))
+
 (ert-run-tests-batch-and-exit)

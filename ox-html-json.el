@@ -5,13 +5,15 @@
   :translate-alist '((template . org-html-json-template))
   :options-alist '((:tags "TAGS" nil nil split)
                    (:eid "EID" nil nil t)
-                   (:tz "TZ" nil nil t)))
+                   (:tz "TZ" nil nil t)
+                   (:image "IMAGE" nil nil t)))
 
 (defun org-html-json-template (contents info)
   (let* ((title (org-export-data
                  (or (plist-get info :title) "") info))
          (timestamp (plist-get info :date))
          (tz (plist-get info :tz))
+         (image (plist-get info :image))
          (datetime (if timestamp
                        (if tz
                            (concat (org-timestamp-format (car timestamp) "%Y-%m-%dT%T") (or (car (split-string tz)) tz))
@@ -23,6 +25,7 @@
                         :date ,datetime
                         :tags ,tags
                         :eid ,eid
+                        :image ,image
                         :content ,contents)))
     (json-encode data)))
 
