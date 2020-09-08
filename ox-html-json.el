@@ -16,7 +16,7 @@
          (image (plist-get info :image))
          (datetime (if timestamp
                        (if tz
-                           (concat (org-timestamp-format (car timestamp) "%Y-%m-%dT%T") (or (car (split-string tz)) tz))
+                           (concat (org-timestamp-format (car timestamp) "%Y-%m-%dT%T") (replace-regexp-in-string "\\(\[0-9\]\\{2\\}\\)\\(\[0-9\]\\{2\\}\\)" "\\1:\\2" (or (car (split-string tz)) tz)))
                          (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z"))
                      ""))
          (tags (plist-get info :tags))
