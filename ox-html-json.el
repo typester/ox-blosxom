@@ -19,7 +19,7 @@
                            (concat (org-timestamp-format (car timestamp) "%Y-%m-%dT%T") (replace-regexp-in-string "\\(\[0-9\]\\{2\\}\\)\\(\[0-9\]\\{2\\}\\)" "\\1:\\2" (or (car (split-string tz)) tz)))
                          (org-timestamp-format (car timestamp) "%Y-%m-%dT%T%z"))
                      ""))
-         (tags (plist-get info :tags))
+         (tags (or (plist-get info :tags) []))
          (eid (plist-get info :eid))
          (data `(:title ,title
                         :date ,datetime

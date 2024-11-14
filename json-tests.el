@@ -26,6 +26,11 @@
          (tags (plist-get json :tags)))
     (should (equal tags ["foo" "bar"]))))
 
+(ert-deftest empty_tags ()
+  (let* ((json (render-json-to-string (org-export-string-as "#+TITLE: hoge\n#+TAGS:" 'html-json)))
+         (tags (plist-get json :tags)))
+    (should (equal tags []))))
+
 (ert-deftest image ()
   (let* ((json (render-json-to-string (org-export-string-as "#+IMAGE: https://example.com/thumbnail.jpg" 'html-json)))
          (image (plist-get json :image)))
